@@ -33,10 +33,12 @@ function putUser() {
   $.ajax({
     type: 'PUT',
     url: "http://localhost:8000/users/" + user1.user,
-    data: {user: $('#user').val(), pass: $('#pass').val(), fullname: $('#fullname').val()},
+    data: {pass: $('#pass').val(), fullname: $('#fullname').val()},
     success: function(result) {
       user1 = JSON.parse(result);
       $('.result').html(result);
+    },
+    error: function(a, b, c) {
     }
   });
 }
@@ -44,7 +46,7 @@ function putUser() {
 function delUser() {
   $.ajax({
     type: 'DELETE',
-    url: "http://localhost:8000/users/" + user1.user,
+    url: "http://localhost:8000/users/" + (user1.user || $('#.user').val()),
     success: function(result) {
       $('.result').html(result);
     }
@@ -69,16 +71,32 @@ function delUser() {
 <b>Fullname:</b>
 <input type="text" name="fullname" id="fullname"/>
 </p>
+<p>
+<b>Email:</b>
+<input type="text" name="email" id="email"/>
+</p>
 </form>
 </div>
 
 <div>
-<b>Operations</b>
+<b>User Operations</b>
 <button onclick="getUser()">GET</button>
 <button onclick="postUser()">POST</button>
 <button onclick="putUser()">PUT</button>
 <button onclick="delUser()">DEL</button>
 </div>
+
+<br/>
+
+<div>
+<b>Email Operations</b>
+<button onclick="getEmail()">GET</button>
+<button onclick="postEmail()">POST</button>
+<button onclick="putEmail()">PUT</button>
+<button onclick="delEmail()">DEL</button>
+</div>
+
+<br/>
 
 <div class="result"></div>
 

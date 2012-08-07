@@ -1,72 +1,89 @@
 var restify = require('restify'),
   mongo = require('mongoose'),
+  db = mongo.connect('mongodb://localhost/account_server'),
+  Schema = mongo.Schema,
+  ObjectId = Schema.ObjectId,
+  Models = require('./models').make(Schema, mongo),
+  Email = Models.Email,
+  User = Models.User,
   util = require('util');
-
-mongo.connect('mongodb://localhost/test');
 
 var server = restify.createServer({
   name: 'Account Server'
 });
 
-server.use(restify.bodyParser());
+// functions to manage model's
 
-// models
-
-var UserModel = new mongo.Schema({
-  name: { type: String },
-  pass: { type: String },
-  fullname: { type: String }
-});
-
-var User = mongo.model('User', UserModel);
-
-// server listener's
-
-server.get('/users/:user', function(req, res, next) {
-  User.findOne({user: req.params.user}, function (err, doc) {
+function fn_get(model, key, req, res, next) {
+  var options = new Object();
+  options[key] = req.params[key];
+  model.findOne(options, function (err, instance) {
     if (err) res.send(err);
-    else res.send(doc || {});
+    else if (!instance) res.send(404, {title: 'Not Found'});
+    else res.send(instance);
   });
   return next();
-});
+}
 
-server.post('/users', function(req, res, next) {
-  var user = new User(req.params);
-  user.save(function (err) {
+function fn_post(model, req, res, next) {
+  var instance = new model(req.params);
+  instance.save(function (err) {
     if(err) res.send(err);
-    else res.send(user);
+    else res.send(instance);
   });
   return next();
-});
+}
 
-server.put('/users/:user', function(req, res, next) {
-  User.findOne({user: req.params.user}, function (err, doc) {
+function fn_put(model, key, req, res, next) {
+  var options = new Object();
+  options[key] = req.params[key];
+  model.findOne(options, function (err, instance) {
     if (err) res.send(err);
-    else if (doc) {
-      doc.fullname = req.params.fullname;
-      doc.pass = req.params.pass;
-      doc.save(function(err) {
+    else if (instance) {
+      // TODO:forEach nas propriedades
+      instance.save(function(err) {
         if(err) res.send(err);
-        else res.send(doc);
+        else res.send(instance);
       });
     } else res.send({});
   });
   return next();
-});
+}
 
-server.del('/users/:user', function(req, res, next) {
-  User.findOne({user: req.params.user}, function(err, doc) {
+function fn_del(model, key, req, res, next) {
+  var options = new Object();
+  options[key] = req.params[key];
+  User.findOne(options, function(err, instance) {
     if (err) res.send(err);
-    else if (doc) {
-      doc.remove(function(err) {
+    else if (instance) {
+      instance.remove(function(err) {
         if(err) res.send(err);
         else res.send(200);
       });
-    } else res.send({});
+    } else res.send(404, {title: 'Not Found'});
   });
   return next();
+}
+
+// server config & listener's
+
+server.use(restify.bodyParser());
+
+server.get('/users/:user', function(req, res, next) {
+  return fn_get(User, 'user', req, res, next);
 });
 
+server.post('/users', function(req, res, next) {
+  return fn_post(User, req, res, next);
+});
+
+server.put('/users/:user', function(req, res, next) {
+  return fn_put(User, 'user', req, res, next);
+});
+
+server.del('/users/:user', function(req, res, next) {
+  return fn_del(User, 'user', req, res, next);
+});
 
 server.listen(8000);
 
