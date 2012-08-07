@@ -1,4 +1,3 @@
-
 function make(schema, mongo) {
   var EmailSchema = new schema({
     mail: { type: String }
@@ -11,8 +10,10 @@ function make(schema, mongo) {
     emails: [EmailSchema]
   });
 
-  return {Email: mongo.model('Email', EmailSchema), User: mongo.model('User', UserSchema)};
+  return {
+    Email: mongo.model('Email', EmailSchema), 
+    User: mongo.model('User', UserSchema)
+  };
 }
 
 module.exports.make = make;
-

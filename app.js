@@ -40,7 +40,9 @@ function fn_put(model, key, req, res, next) {
   model.findOne(options, function (err, instance) {
     if (err) res.send(err);
     else if (instance) {
-      // TODO:forEach nas propriedades
+      for (var k in req.params) {
+        if (k != '_id' && k != key) instance[k] = req.params[k];
+      }
       instance.save(function(err) {
         if(err) res.send(err);
         else res.send(instance);
