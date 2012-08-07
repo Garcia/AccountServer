@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>
+var user1 = null;
+
+function getUser() {
+  var user = $('#user').val();
+  $.ajax({
+    type: 'GET',
+    url: "http://localhost:8000/users/" + user,
+    success: function(result) {
+      user1 = JSON.parse(result);
+      $('.result').html(result);
+    }
+  });
+}
+
+function postUser() {
+  $.ajax({
+    type: 'POST',
+    url: "http://localhost:8000/users",
+    data: {user: $('#user').val(), pass: $('#pass').val(), fullname: $('#fullname').val()},
+    success: function(result) {
+      user1 = JSON.parse(result);
+      $('.result').html(result);
+    }
+  });
+}
+
+function putUser() {
+  $.ajax({
+    type: 'PUT',
+    url: "http://localhost:8000/users/" + user1.user,
+    data: {user: $('#user').val(), pass: $('#pass').val(), fullname: $('#fullname').val()},
+    success: function(result) {
+      user1 = JSON.parse(result);
+      $('.result').html(result);
+    }
+  });
+}
+
+function delUser() {
+  $.ajax({
+    type: 'DELETE',
+    url: "http://localhost:8000/users/" + user1.user,
+    success: function(result) {
+      $('.result').html(result);
+    }
+  });
+}
+</script>
+</head>
+<body>
+
+<div>
+<h1>User</h1>
+<form>
+<p>
+<b>User:</b>
+<input type="text" name="user" id="user"/>
+</p>
+<p>
+<b>Pass:</b>
+<input type="text" name="pass" id="pass"/>
+</p>
+<p>
+<b>Fullname:</b>
+<input type="text" name="fullname" id="fullname"/>
+</p>
+</form>
+</div>
+
+<div>
+<b>Operations</b>
+<button onclick="getUser()">GET</button>
+<button onclick="postUser()">POST</button>
+<button onclick="putUser()">PUT</button>
+<button onclick="delUser()">DEL</button>
+</div>
+
+<div class="result"></div>
+
+</body>
+</html>
