@@ -1,14 +1,18 @@
 function make(schema, mongo) {
+
   var EmailModel = new schema({
+    owner: { type: String },
     mail: { type: String }
   });
 
   var PhoneModel = new schema({
+    owner: { type: String },
     area: { type: Number },
     number: { type: Number }
   });
 
   var AddressModel = new schema({
+    owner: { type: String },
     street: { type: String },
     number: { type: String },
     district: { type: String },
@@ -19,6 +23,7 @@ function make(schema, mongo) {
   });
 
   var CreditCardModel = new schema({
+    owner: { type: String },
     number: { type: Number },
     security_number: { type: Number },
     valid: { type: Date }
@@ -28,13 +33,16 @@ function make(schema, mongo) {
     user: { type: String },
     pass: { type: String },
     fullname: { type: String },
-    emails: [EmailModel],
-    phones: [PhoneModel],
-    address: [AddressModel],
-    creditcards: [CreditCardModel]
+    birthdate: { type: Date }
   });
 
-  return mongo.model('User', UserModel);
+  return {
+    Email: mongo.model('Email', EmailModel),
+    Phone: mongo.model('Phone', PhoneModel),
+    Address: mongo.model('Address', AddressModel),
+    CreditCard: mongo.model('CreditCard', CreditCardModel),
+    User: mongo.model('User', UserModel)
+  };
 }
 
 module.exports.make = make;

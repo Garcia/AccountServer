@@ -1,65 +1,16 @@
 var restify = require('restify'),
   mongo = require('mongoose'),
   db = mongo.connect('mongodb://localhost/account_server'),
-  Schema = mongo.Schema,
-  ObjectId = Schema.ObjectId,
-  User = require('./models').make(Schema, mongo),
+  schema = mongo.Schema,
+  objectid = schema.ObjectId,
+  route = require('./controller'),
+  models = require('./models').make(schema, mongo),
+  Email = models.Email,
+  Phone = models.Phone,
+  Address = models.Address,
+  CreditCard = models.CreditCard,
+  User = models.User,
   util = require('util');
-
-// functions to manage model's
-
-function fn_get(model, key, req, res, next) {
-  var options = new Object();
-  options[key] = req.params[key];
-  model.findOne(options, function (err, instance) {
-    if (err) res.send(err);
-    else if (!instance) res.send(404, {title: 'Not Found'});
-    else res.send(instance);
-  });
-  return next();
-}
-
-function fn_post(model, req, res, next) {
-  var instance = new model(req.params);
-  instance.save(function (err) {
-    if(err) res.send(err);
-    else res.send(instance);
-  });
-  return next();
-}
-
-function fn_put(model, key, req, res, next) {
-  var options = new Object();
-  options[key] = req.params[key];
-  model.findOne(options, function (err, instance) {
-    if (err) res.send(err);
-    else if (instance) {
-      for (var k in req.params) {
-        if (k != '_id' && k != key) instance[k] = req.params[k];
-      }
-      instance.save(function(err) {
-        if(err) res.send(err);
-        else res.send(instance);
-      });
-    } else res.send(404, {title: 'Not Fount'});
-  });
-  return next();
-}
-
-function fn_del(model, key, req, res, next) {
-  var options = new Object();
-  options[key] = req.params[key];
-  User.findOne(options, function(err, instance) {
-    if (err) res.send(err);
-    else if (instance) {
-      instance.remove(function(err) {
-        if(err) res.send(err);
-        else res.send(200);
-      });
-    } else res.send(404, {title: 'Not Found'});
-  });
-  return next();
-}
 
 // server config & listener's
 
@@ -69,52 +20,19 @@ var server = restify.createServer({
 
 server.use(restify.bodyParser());
 
-// user
-server.get('/users/:user', function(req, res, next) {
-  return fn_get(User, 'user', req, res, next);
-});
+route.fn_resource(server, User, ['user'], '/users', '/users/:user');
 
-server.post('/users', function(req, res, next) {
-  return fn_post(User, req, res, next);
-});
+route.fn_resource(server, Email, ['owner', 'mail'],
+  /^\/users\/(.+)\/emails/, /^\/users\/(.+)\/emails\/(.+)/);
 
-server.put('/users/:user', function(req, res, next) {
-  return fn_put(User, 'user', req, res, next);
-});
+route.fn_resource(server, Phone, ['owner', 'area', 'number'],
+  /^\/users\/(.+)\/phones/, /^\/users\/(.+)\/phones\/(.+)\/(.+)/);
 
-server.del('/users/:user', function(req, res, next) {
-  return fn_del(User, 'user', req, res, next);
-});
+route.fn_resource(server, Address, ['owner', '_id'],
+  /^\/users\/(.+)\/address/, /^\/users\/(.+)\/address\/(.+)/);
 
-// email
-server.get('/users/:user/emails', function(req, res, next) {
-  User.findOne({user: req.params.user}, function (err, instance) {
-    if (err) res.send(err);
-    else if (!instance) res.send(404, {title: 'Not Found'});
-    else res.send(instance.emails);
-  });
-  return next();
-});
-
-server.get('/users/:user/emails/:mail', function(req, res, next) {
-  res.send(req.params);
-  return next();
-});
-
-server.post('/users/:user/emails', function(req, res, next) {
-  res.send(req.params);
-  return next();
-});
-
-server.put('/users/:user/email/:mail', function(req, res, next) {
-  res.send(req.params);
-  return next();
-});
-
-server.del('/users/:user/email/:mail', function(req, res, next) {
-  res.send(req.params);
-  return next();
-});
+route.fn_resource(server, CreditCard, ['owner', 'number'],
+  /^\/users\/(.+)\/creditcards/, /^\/users\/(.+)\/creditcards\/(.+)/);
 
 server.listen((process.env['APP_PORT'] || 8000));
 
