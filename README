@@ -3,3 +3,24 @@ AccountServer
 
 Account Server made with Node.js thats expose a REST API
 
+Resources:
+
+  1. /users
+
+  get     /users/:user
+  post    /users
+  put     /users/:user
+  delete  /users/:user
+
+Usage:
+
+  node app.js
+
+  You can configure the port of the connection
+  setting the environment variable APP_PORT
+
+Test:
+
+  You can test the api in your browser. Just open the file ./test/form.html
+  on your browser and, with the server running up, make the tests.
+

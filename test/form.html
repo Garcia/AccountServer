@@ -9,7 +9,7 @@ function getUser() {
   var user = $('#user').val();
   $.ajax({
     type: 'GET',
-    url: "http://localhost:8000/users/" + user,
+    url: $("#server_url").val() + '/' + user,
     complete: function(result, status) {
       //user1 = JSON.parse(result);
       user1 = JSON.parse(result.response);
@@ -21,7 +21,7 @@ function getUser() {
 function postUser() {
   $.ajax({
     type: 'POST',
-    url: "http://localhost:8000/users",
+    url: $("#server_url").val(),
     data: {user: $('#user').val(), pass: $('#pass').val(), fullname: $('#fullname').val()},
     complete: function(result, status) {
       user1 = JSON.parse(result.response);
@@ -33,7 +33,7 @@ function postUser() {
 function putUser() {
   $.ajax({
     type: 'PUT',
-    url: "http://localhost:8000/users/" + user1.user,
+    url: $("#server_url").val() + '/' + user1.user,
     data: {pass: $('#pass').val(), fullname: $('#fullname').val()},
     complete: function(result, status) {
       user1 = JSON.parse(result.response);
@@ -47,7 +47,7 @@ function putUser() {
 function delUser() {
   $.ajax({
     type: 'DELETE',
-    url: "http://localhost:8000/users/" + (user1.user || $('#.user').val()),
+    url: $("#server_url").val() + '/' + (user1.user || $('#.user').val()),
     complete: function(result, status) {
       $('.result').html(result.response);
     }
@@ -60,6 +60,10 @@ function delUser() {
 <div>
 <h1>User</h1>
 <form>
+<p>
+<b>Server URL:</b>
+<input type="text" id="server_url" value="http://localhost:8000/users"/>
+</p>
 <p>
 <b>User:</b>
 <input type="text" name="user" id="user"/>
