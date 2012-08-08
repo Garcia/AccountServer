@@ -8,13 +8,14 @@ function make(schema, mongo) {
     number: { type: Number }
   });
 
-  var AdressModel = new schema({
+  var AddressModel = new schema({
     street: { type: String },
     number: { type: String },
     district: { type: String },
     city: { type: String },
     state: { type: String },
-    country: { type: String }
+    country: { type: String },
+    cep: { type: String }
   });
 
   var CreditCardModel = new schema({
@@ -29,7 +30,7 @@ function make(schema, mongo) {
     fullname: { type: String },
     emails: [EmailModel],
     phones: [PhoneModel],
-    adress: [AdressModel],
+    address: [AddressModel],
     creditcards: [CreditCardModel]
   });
 
