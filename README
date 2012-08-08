@@ -5,12 +5,44 @@ Account Server made with Node.js thats expose a REST API
 
 Resources:
 
-  1. /users
+  1. User
 
   get     /users/:user
   post    /users
   put     /users/:user
   delete  /users/:user
+
+  2. Email
+
+  get     /users/:user/emails
+  get     /users/:user/emails/:mail
+  post    /users/:user/emails
+  put     /users/:user/emails/:mail
+  delete  /users/:user/emails/:mail
+
+  3. Phone
+
+  get     /users/:user/phones
+  get     /users/:user/phones/:are/:number
+  post    /users/:user/phones
+  put     /users/:user/phones/:are/:number
+  delete  /users/:user/phones/:are/:number
+
+  4. Address
+
+  get     /users/:user/address
+  get     /users/:user/address/:_id
+  post    /users/:user/address
+  put     /users/:user/address/:_id
+  delete  /users/:user/address/:_id
+
+  4. CreditCard
+
+  get     /users/:user/creditcards
+  get     /users/:user/creditcards/:number
+  post    /users/:user/creditcards
+  put     /users/:user/creditcards/:number
+  delete  /users/:user/creditcards/:number
 
 Usage:
 
