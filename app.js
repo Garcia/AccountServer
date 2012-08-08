@@ -71,6 +71,7 @@ var server = restify.createServer({
 
 server.use(restify.bodyParser());
 
+// user
 server.get('/users/:user', function(req, res, next) {
   return fn_get(User, 'user', req, res, next);
 });
@@ -87,5 +88,35 @@ server.del('/users/:user', function(req, res, next) {
   return fn_del(User, 'user', req, res, next);
 });
 
-server.listen(8000);
+// email
+server.get('/users/:user/emails', function(req, res, next) {
+  User.findOne({user: req.params.user}, function (err, instance) {
+    if (err) res.send(err);
+    else if (!instance) res.send(404, {title: 'Not Found'});
+    else res.send(instance.emails);
+  });
+  return next();
+});
+
+server.get('/users/:user/emails/:mail', function(req, res, next) {
+  res.send(req.params);
+  return next();
+});
+
+server.post('/users/:user/emails', function(req, res, next) {
+  res.send(req.params);
+  return next();
+});
+
+server.put('/users/:user/email/:mail', function(req, res, next) {
+  res.send(req.params);
+  return next();
+});
+
+server.del('/users/:user/email/:mail', function(req, res, next) {
+  res.send(req.params);
+  return next();
+});
+
+server.listen((process.env['APP_PORT'] || 8000));
 
