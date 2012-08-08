@@ -1,6 +1,6 @@
-function fn_resource(server, model, keys, plural, single) {
+function mapResource(server, model, keys, collect, single) {
 
-  function fn_makeOptions(keys, req, res) {
+  function makeOptions(keys, req, res) {
     var options = new Object(), i = 0;
     for (var k in keys) {
       var value = req.params[i] || req.params[keys[k]];
@@ -11,8 +11,8 @@ function fn_resource(server, model, keys, plural, single) {
     return options;
   }
 
-  function fn_getall(model, keys, req, res, next) {
-    model.find(fn_makeOptions(keys, req, res), function (err, docs) {
+  function fnGetAll(model, keys, req, res, next) {
+    model.find(makeOptions(keys, req, res), function (err, docs) {
       if (err) res.send(err);
       else if (!docs) res.send({});
       else res.send(docs)
@@ -20,16 +20,16 @@ function fn_resource(server, model, keys, plural, single) {
     return next();
   }
 
-  function fn_get(model, keys, req, res, next) {
-    model.findOne(fn_makeOptions(keys, req, res), function (err, instance) {
+  function fnGet(model, keys, req, res, next) {
+    model.findOne(makeOptions(keys, req, res), function (err, instance) {
       if (err) res.send(err);
-      else if (!instance) res.send(404, {title: 'Not Found'});
+      else if (!instance) res.send(404, {message: 'Not Found'});
       else res.send(instance);
     });
     return next();
   }
 
-  function fn_post(model, req, res, next) {
+  function fnPost(model, req, res, next) {
     var instance = new model(req.params);
     instance.save(function (err) {
       if(err) res.send(err);
@@ -38,8 +38,8 @@ function fn_resource(server, model, keys, plural, single) {
     return next();
   }
 
-  function fn_put(model, keys, req, res, next) {
-    model.findOne(fn_makeOptions(keys, req, res), function (err, instance) {
+  function fnPut(model, keys, req, res, next) {
+    model.findOne(makeOptions(keys, req, res), function (err, instance) {
       if (err) res.send(err);
       else if (instance) {
         for (var k in req.params) {
@@ -49,44 +49,44 @@ function fn_resource(server, model, keys, plural, single) {
           if(err) res.send(err);
           else res.send(instance);
         });
-      } else res.send(404, {title: 'Not Fount'});
+      } else res.send(404, {message: 'Not Fount'});
     });
     return next();
   }
 
-  function fn_del(model, keys, req, res, next) {
-    model.findOne(fn_makeOptions(keys, req, res), function(err, instance) {
+  function fnDel(model, keys, req, res, next) {
+    model.findOne(makeOptions(keys, req, res), function(err, instance) {
       if (err) res.send(err);
       else if (instance) {
         instance.remove(function(err) {
           if(err) res.send(err);
           else res.send(200);
         });
-      } else res.send(404, {title: 'Not Found'});
+      } else res.send(404, {message: 'Not Found'});
     });
     return next();
   }
 
   server.get(single, function(req, res, next) {
-    return fn_get(model, keys , req, res, next);
+    return fnGet(model, keys , req, res, next);
   });
 
-  server.get(plural, function(req, res, next) {
-    return fn_getall(model, keys, req, res, next);
+  server.get(collect, function(req, res, next) {
+    return fnGetAll(model, keys, req, res, next);
   });
 
-  server.post(plural, function(req, res, next) {
-    return fn_post(model, req, res, next);
+  server.post(collect, function(req, res, next) {
+    return fnPost(model, req, res, next);
   });
 
   server.put(single, function(req, res, next) {
-    return fn_put(model, keys, req, res, next);
+    return fnPut(model, keys, req, res, next);
   });
 
   server.del(single, function(req, res, next) {
-    return fn_del(model, keys, req, res, next);
+    return fnDel(model, keys, req, res, next);
   });
 }
 
-module.exports.fn_resource = fn_resource;
+module.exports.mapResource = mapResource;
 

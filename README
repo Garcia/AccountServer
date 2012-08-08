@@ -53,6 +53,6 @@ Usage:
 
 Test:
 
-  You can test the api in your browser. Just open the file ./test/form.html
+  You can test the api. Just open the file ./test/form.html
   on your browser and, with the server running up, make the tests.
 

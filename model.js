@@ -1,4 +1,4 @@
-function make(schema, mongo) {
+function mapModels(schema, mongo) {
 
   var EmailModel = new schema({
     owner: { type: String },
@@ -45,5 +45,5 @@ function make(schema, mongo) {
   };
 }
 
-module.exports.make = make;
+module.exports.mapModels = mapModels;
 
