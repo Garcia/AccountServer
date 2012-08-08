@@ -17,3 +17,4 @@ function make(schema, mongo) {
 }
 
 module.exports.make = make;
+

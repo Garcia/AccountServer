@@ -8,10 +8,6 @@ var restify = require('restify'),
   User = Models.User,
   util = require('util');
 
-var server = restify.createServer({
-  name: 'Account Server'
-});
-
 // functions to manage model's
 
 function fn_get(model, key, req, res, next) {
@@ -47,7 +43,7 @@ function fn_put(model, key, req, res, next) {
         if(err) res.send(err);
         else res.send(instance);
       });
-    } else res.send({});
+    } else res.send(404, {title: 'Not Fount'});
   });
   return next();
 }
@@ -68,6 +64,10 @@ function fn_del(model, key, req, res, next) {
 }
 
 // server config & listener's
+
+var server = restify.createServer({
+  name: 'Account Server'
+});
 
 server.use(restify.bodyParser());
 

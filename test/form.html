@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
 <script>
 var user1 = null;
 
@@ -10,9 +10,10 @@ function getUser() {
   $.ajax({
     type: 'GET',
     url: "http://localhost:8000/users/" + user,
-    success: function(result) {
-      user1 = JSON.parse(result);
-      $('.result').html(result);
+    complete: function(result, status) {
+      //user1 = JSON.parse(result);
+      user1 = JSON.parse(result.response);
+      $('.result').html(result.response);
     }
   });
 }
@@ -22,9 +23,9 @@ function postUser() {
     type: 'POST',
     url: "http://localhost:8000/users",
     data: {user: $('#user').val(), pass: $('#pass').val(), fullname: $('#fullname').val()},
-    success: function(result) {
-      user1 = JSON.parse(result);
-      $('.result').html(result);
+    complete: function(result, status) {
+      user1 = JSON.parse(result.response);
+      $('.result').html(result.response);
     }
   });
 }
@@ -34,9 +35,9 @@ function putUser() {
     type: 'PUT',
     url: "http://localhost:8000/users/" + user1.user,
     data: {pass: $('#pass').val(), fullname: $('#fullname').val()},
-    success: function(result) {
-      user1 = JSON.parse(result);
-      $('.result').html(result);
+    complete: function(result, status) {
+      user1 = JSON.parse(result.response);
+      $('.result').html(result.response);
     },
     error: function(a, b, c) {
     }
@@ -47,8 +48,8 @@ function delUser() {
   $.ajax({
     type: 'DELETE',
     url: "http://localhost:8000/users/" + (user1.user || $('#.user').val()),
-    success: function(result) {
-      $('.result').html(result);
+    complete: function(result, status) {
+      $('.result').html(result.response);
     }
   });
 }
