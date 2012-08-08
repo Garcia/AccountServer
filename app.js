@@ -3,9 +3,7 @@ var restify = require('restify'),
   db = mongo.connect('mongodb://localhost/account_server'),
   Schema = mongo.Schema,
   ObjectId = Schema.ObjectId,
-  Models = require('./models').make(Schema, mongo),
-  Email = Models.Email,
-  User = Models.User,
+  User = require('./models').make(Schema, mongo),
   util = require('util');
 
 // functions to manage model's
