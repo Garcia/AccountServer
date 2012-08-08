@@ -51,8 +51,18 @@ Usage:
   You can configure the port of the connection
   setting the environment variable APP_PORT
 
+  You can too, configure the number of fork child process
+  setting the environment variable APP_FORK. Default is
+  number of core of processor.
+
 Test:
 
   You can test the api. Just open the file ./test/form.html
   on your browser and, with the server running up, make the tests.
+
+TODO:
+
+  1. Athentication
+  2. Authorization
+  3. Auditing
 
