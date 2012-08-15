@@ -1,0 +1,16 @@
+{
+  "author": "Garcia Souza <garcia.rsouza@gmail.com> (http://garciaonrails.appspot.com)",
+  "name": "AccountServer",
+  "homepage": "https://github.com/Garcia/AccountServer",
+  "version": "0.1.1",
+  "descrition": "Account Server made with Node.js thats expose a REST API",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Garcia/AccountServer.git"
+  },
+  "devDependencies": {
+    "restify": ">=1.4.4",
+    "mongoose": ">=2.7.3"
+  }
+}
